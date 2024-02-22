@@ -1,0 +1,45 @@
+﻿@using Azure.Storage.Blobs.Models
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-controller="Main" asp-action="Upload" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="file">Upload .docx File:</label>
+        <input type="file" class="form-control-file" id="file" name="file" accept=".docx" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Enter Email:</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<form asp-controller="Main" asp-action="GetBlobList" method="get">
+    <button type="submit" class="btn btn-secondary mt-3">Get List of Blobs</button>
+</form>
+
+@if (ViewData["Blobs"] != null && ((List<BlobItem>)ViewData["Blobs"]).Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Size (Bytes)</th>
+                <th>LastModified</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var blob in (List<BlobItem>)ViewData["Blobs"])
+            {
+                <tr>
+                    <td>@blob.Name</td>
+                    <td>@blob.Properties.ContentLength</td>
+                    <td>@blob.Properties.LastModified</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
